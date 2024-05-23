@@ -1,0 +1,31 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Game {
+  createdAt DateTime  @default(now())
+  date      DateTime?
+  id        String    @id @default(cuid())
+  name      String?
+  outcomes  Outcome[]
+  updatedAt DateTime  @updatedAt
+}
+
+model Outcome {
+  createdAt DateTime           @default(now())
+  game      Game?              @relation(fields: [gameId], references: [id])
+  gameId    String?
+  id        String             @id @default(cuid())
+  result    EnumOutcomeResult?
+  units     Int?
+  updatedAt DateTime           @updatedAt
+}
+
+enum EnumOutcomeResult {
+  Option1
+}
